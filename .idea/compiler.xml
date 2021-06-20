@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8">
+    <bytecodeTargetLevel target="11">
       <module name="Texts.commonMain" target="1.8" />
       <module name="Texts.commonTest" target="1.8" />
       <module name="Texts.jvmMain" target="1.8" />
       <module name="Texts.jvmTest" target="1.8" />
+      <module name="Texts.table.commonMain" target="1.8" />
+      <module name="Texts.table.commonTest" target="1.8" />
+      <module name="Texts.table.jvmMain" target="1.8" />
+      <module name="Texts.table.jvmTest" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
