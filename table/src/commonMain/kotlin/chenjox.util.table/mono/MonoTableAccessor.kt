@@ -1,6 +1,7 @@
 package chenjox.util.table.mono
 
 import chenjox.util.table.TableException
+import chenjox.util.table.TableException.Companion.CAUSE_ARGUMENT
 import chenjox.util.table.TableException.Companion.CAUSE_RETRIEVE
 
 interface MonoTableAccessor<E> {
@@ -26,23 +27,23 @@ interface MonoTableAccessor<E> {
                 || curRow + relRow >= accessor.getRows() || curRow + relRow < 0
             ) {
                 fallback ?: throw TableException("$CAUSE_RETRIEVE: Index out of Bounds without a fallback value!")
-            }else accessor[curCol + relColumn, curRow + relRow]
+            }else if(relColumn != 0 || relRow != 0) accessor[curCol + relColumn, curRow + relRow] else throw TableException("$CAUSE_ARGUMENT: A Cell cannot reference itself!")
         }
 
         override fun getLastValueInRow(row: Int): E {
-            TODO("Not yet implemented")
+            return accessor.get(accessor.getColumns()-1, row)
         }
 
         override fun getLastValueInColumn(column: Int): E {
-            TODO("Not yet implemented")
+            return accessor.get(column, accessor.getRows())
         }
 
         override fun getFirstValueInRow(row: Int): E {
-            TODO("Not yet implemented")
+            return accessor.get(0, row)
         }
 
         override fun getFirstValueInColumn(column: Int): E {
-            TODO("Not yet implemented")
+            return accessor.get(column, 0)
         }
 
         override var fallback: E?
@@ -61,10 +62,10 @@ interface MonoTableRelativeAccessor<E> {
 
     operator fun get(relColumn: Int, relRow: Int) : E
 
-    fun getLastValueInRow(row: Int = getCurrentRow()): E
-    fun getLastValueInColumn(column: Int = getCurrentColumn()): E
+    fun getLastValueInRow(row: Int): E
+    fun getLastValueInColumn(column: Int): E
 
-    fun getFirstValueInRow(row: Int = getCurrentRow()): E
-    fun getFirstValueInColumn(column: Int = getCurrentColumn()): E
+    fun getFirstValueInRow(row: Int): E
+    fun getFirstValueInColumn(column: Int): E
 
 }

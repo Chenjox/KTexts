@@ -55,9 +55,13 @@ class ArrayColumnMultiTable : MutableColumnMultiTable {
         checkRowBounds(row)
         val mutList : MutableList<Any> = ArrayList(getColumns())
         for (i in 0 until getColumns()){
-            mutList.add( this.get(i, row, Any::class) )
+            mutList.add( this.getUnsafe(i, row) )
         }
         return mutList
+    }
+
+    private fun getUnsafe(column: Int, row: Int): Any {
+        return Any::class.cast( content[column][row] )
     }
 
     override operator fun <T : Any> get(column: Int, row: Int, clazz: KClass<T>): T {

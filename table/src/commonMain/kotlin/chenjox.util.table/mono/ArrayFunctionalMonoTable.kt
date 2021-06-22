@@ -64,7 +64,7 @@ class ArrayFunctionalMonoTable<E> : MutableFunctionalMonoTable<E>{
     }
 
     override fun getColumn(column: Int): List<E> {
-        TODO("Not yet implemented")
+        TODO()
     }
 
     override fun getRow(row: Int): List<E> {

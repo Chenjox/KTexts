@@ -3,10 +3,13 @@ import chenjox.util.table.mono.qol.*
 import chenjox.util.table.multi.*
 import chenjox.util.table.multi.qol.addIntColumn
 import chenjox.util.table.multi.qol.addStringColumn
+import chenjox.util.table.multi.qol.asStringMonoTable
 import chenjox.util.table.renderer.ascii.AsciiRenderer
 
 fun main(){
     funcTable()
+    MultiTable()
+    MonoTable()
 }
 
 fun MultiTable(){
@@ -19,6 +22,9 @@ fun MultiTable(){
     val a : MutableList<String> = mutableListOf( "Some", "Thing" )
     a.add( a.size, "Third one" )
     println( a.toString() )
+
+    val mt = t.asStringMonoTable()
+    println( AsciiRenderer(mt).render() )
 }
 
 fun MonoTable(){
@@ -48,5 +54,6 @@ fun funcTable(){
     t[2,1] = f
     t[2,2] = f
     t[2,3] = f
+
     println( AsciiRenderer(t).render() )
 }

@@ -29,3 +29,7 @@ fun <E> MutableMonoTable<E>.setColumn(column: Int, vararg new: E){
 fun MutableMonoTable<Int>.addIntColumn(vararg new: Int){
     this.addColumn(new.asList())
 }
+
+infix fun <E> MutableMonoTable<E>.holds(other: Int){
+
+}

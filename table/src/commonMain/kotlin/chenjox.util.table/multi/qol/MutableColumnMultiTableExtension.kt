@@ -1,6 +1,8 @@
 package chenjox.util.table.multi.qol
 
+import chenjox.util.table.mono.ArrayMonoTable
 import chenjox.util.table.mono.MonoTable
+import chenjox.util.table.mono.MutableMonoTable
 import chenjox.util.table.multi.MutableColumnMultiTable
 import kotlin.reflect.KClass
 
@@ -13,6 +15,8 @@ fun <T : Any,E : Any> MutableColumnMultiTable.computeAndAddColumn(function: (T) 
     addColumn( position, result, mappingClazz )
 }
 
-fun MutableColumnMultiTable.mapToStringMonoTable() : MonoTable<String> {
-    TODO("MonoTable package must be built!")
+fun MutableColumnMultiTable.asStringMonoTable() : MonoTable<String> {
+    val t : MutableMonoTable<String> = ArrayMonoTable()
+    for (i in 0 until getRows()) t.addRow( this.getRow(i).map { it.toString() } )
+    return t
 }
