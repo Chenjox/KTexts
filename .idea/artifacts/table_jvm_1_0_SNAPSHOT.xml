@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="table-jvm-1.0-SNAPSHOT">
-    <output-path>D:\Programmieren\OwnLibs\Kotlin\KTexts\table\build\libs</output-path>
-    <root id="archive" name="table-jvm-1.0-SNAPSHOT.jar">
-      <element id="module-output" name="Texts.table.jvmMain" />
-    </root>
-  </artifact>
-</component>
