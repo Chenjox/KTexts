@@ -69,3 +69,8 @@ interface MonoTableRelativeAccessor<E> {
     fun getFirstValueInColumn(column: Int): E
 
 }
+
+fun <E> MonoTableRelativeAccessor<E>.left(columns: Int = 1): E = get(-columns, 0)
+fun <E> MonoTableRelativeAccessor<E>.up(rows: Int = 1): E = get(0, -rows)
+fun <E> MonoTableRelativeAccessor<E>.down(rows: Int = 1): E = get(0, rows)
+fun <E> MonoTableRelativeAccessor<E>.right(columns: Int = 1): E = get(columns, 0)

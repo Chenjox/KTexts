@@ -1,6 +1,6 @@
 package chenjox.util.table.mono
 
-class ArrayMonoTable<E> : MutableMonoTable<E> {
+class ArrayMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableMonoTable<E> {
 
     private val backingList: MutableList<MutableList<E>> = ArrayList()
 
@@ -9,16 +9,16 @@ class ArrayMonoTable<E> : MutableMonoTable<E> {
         checkRowBounds(row)
     }
     private fun checkColumnBounds(columnIndex: Int){
-        if((columnIndex >= getColumns() || columnIndex < 0) && getColumns()!=0) throw IndexOutOfBoundsException()
+        if((columnIndex >= getColumns() || columnIndex < 0) && getColumns()!=0) throw IndexOutOfBoundsException("Size: ${getColumns()}, Actual: $columnIndex")
     }
     private fun checkRowBounds(rowIndex: Int){
-        if((rowIndex >= getRows() || rowIndex < 0) && getRows()!=0) throw IndexOutOfBoundsException()
+        if((rowIndex >= getRows() || rowIndex < 0) && getRows()!=0) throw IndexOutOfBoundsException("Size: ${getRows()}, actual: $rowIndex")
     }
     private fun checkRowSize(newRow: List<E>){
-        if(newRow.size!=getColumns() && getColumns()!=0) throw IllegalArgumentException()
+        if(newRow.size!=getColumns() && getColumns()!=0) throw IllegalArgumentException("Size: ${getColumns()}, actual: $newRow")
     }
     private fun checkColumnSize(newColumn: List<E>){
-        if(newColumn.size!=getRows() && getRows()!=0) throw IllegalArgumentException()
+        if(newColumn.size!=getRows() && getRows()!=0) throw IllegalArgumentException("Size: ${getRows()}, actual: $newColumn")
     }
 
     override fun getColumns(): Int {
@@ -42,7 +42,9 @@ class ArrayMonoTable<E> : MutableMonoTable<E> {
 
     override fun getColumn(column: Int): List<E> {
         checkColumnBounds(column)
-        TODO("Copying mechanism")
+        return List(getRows()) {
+            this@ArrayMonoTable[column, it]
+        }
     }
 
     override fun getRow(row: Int): List<E> {

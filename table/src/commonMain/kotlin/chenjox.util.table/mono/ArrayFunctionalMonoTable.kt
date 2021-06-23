@@ -1,6 +1,6 @@
 package chenjox.util.table.mono
 
-class ArrayFunctionalMonoTable<E> : MutableFunctionalMonoTable<E>{
+class ArrayFunctionalMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableFunctionalMonoTable<E>{
 
     private val backingList: MutableList<MutableList<TableCell<E>>> = ArrayList()
     private val access: MonoTableAccessor<E> by lazy { Accessor() }
@@ -10,16 +10,16 @@ class ArrayFunctionalMonoTable<E> : MutableFunctionalMonoTable<E>{
         checkRowBounds(row)
     }
     private fun checkColumnBounds(columnIndex: Int){
-        if((columnIndex >= getColumns() || columnIndex < 0) && getColumns()!=0) throw IndexOutOfBoundsException()
+        if((columnIndex >= getColumns() || columnIndex < 0) && getColumns()!=0) throw IndexOutOfBoundsException("Size: ${getColumns()}, Actual: $columnIndex")
     }
     private fun checkRowBounds(rowIndex: Int){
-        if((rowIndex >= getRows() || rowIndex < 0) && getRows()!=0) throw IndexOutOfBoundsException()
+        if((rowIndex >= getRows() || rowIndex < 0) && getRows()!=0) throw IndexOutOfBoundsException("Size: ${getRows()}, actual: $rowIndex")
     }
     private fun checkRowSize(newRow: List<E>){
-        if(newRow.size!=getColumns() && getColumns()!=0) throw IllegalArgumentException()
+        if(newRow.size!=getColumns() && getColumns()!=0) throw IllegalArgumentException("Size: ${getColumns()}, actual: $newRow")
     }
     private fun checkColumnSize(newColumn: List<E>){
-        if(newColumn.size!=getRows() && getRows()!=0) throw IllegalArgumentException()
+        if(newColumn.size!=getRows() && getRows()!=0) throw IllegalArgumentException("Size: ${getRows()}, actual: $newColumn")
     }
 
     internal inner class Accessor : MonoTableAccessor<E> {
@@ -64,7 +64,10 @@ class ArrayFunctionalMonoTable<E> : MutableFunctionalMonoTable<E>{
     }
 
     override fun getColumn(column: Int): List<E> {
-        TODO()
+        checkColumnBounds(column)
+        return List(getRows()) {
+            this@ArrayFunctionalMonoTable[column, it]
+        }
     }
 
     override fun getRow(row: Int): List<E> {
@@ -132,13 +135,20 @@ class ArrayFunctionalMonoTable<E> : MutableFunctionalMonoTable<E>{
 
     override fun addRow(row: Int, new: List<E>) {
         checkRowSize(new)
+        if(getColumns() == 0) rowInit( new ) else
         for (i in 0 until getColumns()){
             backingList[i].add(row, ValueCell(new[i]))
         }
     }
+
+    private fun rowInit( new: List<E>){
+        for (e in new){
+            backingList.add( MutableList(1) { ValueCell(e) })
+        }
+    }
 }
 
-sealed class TableCell<E> {
+internal sealed class TableCell<E> {
     abstract fun getValue(currentCol: Int, currentRow: Int) : E
 }
 

@@ -1,59 +1,49 @@
-import chenjox.util.table.mono.*
-import chenjox.util.table.mono.qol.*
-import chenjox.util.table.multi.*
-import chenjox.util.table.multi.qol.addIntColumn
-import chenjox.util.table.multi.qol.addStringColumn
-import chenjox.util.table.multi.qol.asStringMonoTable
-import chenjox.util.table.renderer.ascii.AsciiRenderer
+import chenjox.util.table.dsl.template.ColumnTable
+import chenjox.util.table.dsl.template.ascii
+import chenjox.util.table.dsl.template.mapper
+import chenjox.util.table.dsl.template.padding
+import chenjox.util.table.mono.ArrayFunctionalMonoTable
+import chenjox.util.table.mono.left
+import chenjox.util.table.mono.qol.addRow
+import chenjox.util.table.mono.right
+import chenjox.util.table.templates.ColumnFunctionalTable
+import chenjox.util.table.templates.ColumnTableTemplate
+import chenjox.util.table.templates.DoubleColumnTable
+import chenjox.util.table.transformer.mono.*
+import chenjox.util.table.transformer.mono.ascii.AsciiMonoTransformer
+import kotlin.math.roundToInt
 
 fun main(){
-    funcTable()
-    MultiTable()
-    MonoTable()
+
+    val t = DoubleColumnTable(
+        listOf(
+            null,
+            null,
+            null,
+            { left(1)+left(2) },
+            { left(2)*left(3) },
+            { left(4)-left(5) }
+        )
+        ,
+        SimpleTransformer<Double, String> { (it * 100).roundToInt().toString() }
+            .then( SimpleTransformer { it.dropLast(2)+"."+it.drop( maxOf(it.length-2, 0 )) } )
+            .then( HeaderTransformer( "H1", "H2", "H3", "H4", "H5" ) )
+            .then( AlignmentTransformer(Alignment.RIGHT) )
+            .then( PaddingTransformer() )
+            .then( AsciiMonoTransformer() )
+    )
+
+    t.addRow( 2.0, 3.0, 4.0)
+    t.addRow(3.0, -20.0, 40.0)
+
+    //TODO HeaderTransformer
+    //TODO Padding on left and right
+
+    println( t.render() )
+
 }
 
-fun MultiTable(){
-    val t : MutableColumnMultiTable = ArrayColumnMultiTable()
-    t.addStringColumn( listOf("Test", "OtherTest", "Really a other Test", "What about this") )
-    t.addIntColumn( listOf( 3, 4, 5, 7) )
+fun dsl() {
 
-    println( AsciiRenderer(t).render() )
 
-    val a : MutableList<String> = mutableListOf( "Some", "Thing" )
-    a.add( a.size, "Third one" )
-    println( a.toString() )
-
-    val mt = t.asStringMonoTable()
-    println( AsciiRenderer(mt).render() )
-}
-
-fun MonoTable(){
-    val t : MutableMonoTable<String> = ArrayMonoTable()
-    t.addColumn( "Test1", "Test2", "Test4", "Test6" )
-    t.addColumn( "Test2", "Test3", "Test5", "Test7" )
-    t.addRow( "3", "4" )
-    t.setRow( 0, "Another", "One" )
-    t.setColumn( 0, "Bites", "The", "Dust", "!", "!")
-    println( AsciiRenderer(t).render() )
-}
-
-fun funcTable(){
-    val t : MutableFunctionalMonoTable<Int> = ArrayFunctionalMonoTable()
-    t.addColumn(listOf(2,6,7,8))
-    t.addIntColumn(7,8,9,6)
-    t.addIntColumn(8, 9, 7, 9)
-    val f : MonoTableRelativeAccessor<Int>.() -> Int = {
-        fallback = 1
-        this[-1,0]*this[0,-1]
-    }
-    t[1,0] = f
-    t[1,1] = f
-    t[1,2] = f
-    t[1,3] = f
-    t[2,0] = f
-    t[2,1] = f
-    t[2,2] = f
-    t[2,3] = f
-
-    println( AsciiRenderer(t).render() )
 }
