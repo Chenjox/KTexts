@@ -24,7 +24,7 @@ class ArrayColumnMultiTable : MutableColumnMultiTable {
 
     override fun <T : Any> setColumn(column: Int, new: List<T>, clazz: KClass<T>) {
         checkColumnBounds(column)
-        if(contentClasses[column] != clazz) throw TableException("${TableException.CAUSE_STORE} Expected Class was ${contentClasses[column].qualifiedName}, Actual Class was ${clazz.qualifiedName}")
+        if(contentClasses[column] != clazz) throw TableException("${TableException.CAUSE_STORE} Expected Class was ${contentClasses[column].simpleName}, Actual Class was ${clazz.simpleName}")
         content[column] = new.map { e -> Any::class.cast( e ) }.toMutableList()
     }
 
@@ -37,7 +37,7 @@ class ArrayColumnMultiTable : MutableColumnMultiTable {
     override fun addRow(new: List<Any>, position: Int) {
         //checkRowBounds(position) FIXME validation
         for (i in 0 until getColumns()){
-            if(!contentClasses[i].isInstance( new[i] ) ) throw TableException("${TableException.CAUSE_STORE} Expected Class was ${contentClasses[i].qualifiedName} at index $i, Actual Class was ${new[i]::class.qualifiedName}")
+            if(!contentClasses[i].isInstance( new[i] ) ) throw TableException("${TableException.CAUSE_STORE} Expected Class was ${contentClasses[i].simpleName} at index $i, Actual Class was ${new[i]::class.simpleName}")
         }
         for (i in 0 until getColumns()){
             this.content[i][position] = new[i]
@@ -48,7 +48,7 @@ class ArrayColumnMultiTable : MutableColumnMultiTable {
         checkColumnBounds(column)
         if(contentClasses[column] == clazz){
             return content[column].map { e -> clazz.cast(e) }
-        }else throw TableException("${TableException.CAUSE_RETRIEVE} Expected Class was ${contentClasses[column].qualifiedName}, Actual Class was ${clazz.qualifiedName}")
+        }else throw TableException("${TableException.CAUSE_RETRIEVE} Expected Class was ${contentClasses[column].simpleName}, Actual Class was ${clazz.simpleName}")
     }
 
     override fun getRow(row: Int): List<Any> {
@@ -68,7 +68,7 @@ class ArrayColumnMultiTable : MutableColumnMultiTable {
         checkBounds(column, row)
         if(contentClasses[column] == clazz){
             return clazz.cast( content[column][row] )
-        }else throw TableException("${TableException.CAUSE_RETRIEVE} Expected Class was ${contentClasses[column].qualifiedName}, Actual Class was ${clazz.qualifiedName}")
+        }else throw TableException("${TableException.CAUSE_RETRIEVE} Expected Class was ${contentClasses[column].simpleName}, Actual Class was ${clazz.simpleName}")
     }
 
     override fun getAsString(column: Int, row: Int): String {
@@ -90,6 +90,6 @@ class ArrayColumnMultiTable : MutableColumnMultiTable {
         checkBounds(column, row)
         if(contentClasses[column] == clazz){
             content[column][row] = clazz.cast( element )
-        }else throw TableException("${TableException.CAUSE_STORE} Expected Class was ${contentClasses[column].qualifiedName}, Actual Class was ${clazz.qualifiedName}")
+        }else throw TableException("${TableException.CAUSE_STORE} Expected Class was ${contentClasses[column].simpleName}, Actual Class was ${clazz.simpleName}")
     }
 }
