@@ -1,8 +1,55 @@
 package chenjox.util.table.mono
 
-class ArrayFunctionalMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableFunctionalMonoTable<E>{
 
-    private val backingList: MutableList<MutableList<TableCell<E>>> = ArrayList()
+@Suppress("UNCHECKED_CAST")
+private fun <E> Array<*>.unsafestCast() = this as Array<E>
+
+public class ArrayFunctionalMonoTable<E>(columns: Int = 1, rows: Int = 1, func: (column: Int, row: Int) -> E) : MutableFunctionalMonoTable<E>{
+
+    private var backingArray: Array<TableCell<E>>
+    private var width: Int = columns
+    private var height: Int = rows
+
+    init {
+        val a : Array<in Any> = Array(columns*rows){
+            val row = it % columns
+            val col = it / columns
+            ValueCell(func.invoke(col, row))
+        }
+        val res = a.unsafestCast<ValueCell<E>>() // Hacky Stuff
+
+        backingArray = res.unsafestCast()
+    }
+
+    //TODO Change to singular Array of E
+
+    private fun setArrayAsCell(column: Int, row: Int, cell: TableCell<E>){
+        val index = row * width + column
+        backingArray[index] = cell
+    }
+
+    private fun getFromArrayAsCell(column: Int, row: Int): TableCell<E> {
+        val index = row * width + column
+        return backingArray[index]
+    }
+
+    private fun getFromArray(column: Int, row: Int): E {
+        val index = row * width + column
+        return backingArray[index].getValue(column, row)
+    }
+
+    private fun getColumnFromArray(column: Int): List<E> {
+        return List(height) {
+            backingArray[it * width + column].getValue( column, it )
+        }
+    }
+
+    private fun getRowFromArray(row: Int): List<E>{
+        return List(width) {
+            backingArray[row * width + it].getValue( it, row)
+        }
+    }
+
     private val access: MonoTableAccessor<E> by lazy { Accessor() }
 
     private fun checkBounds(column: Int, row: Int){
@@ -37,22 +84,20 @@ class ArrayFunctionalMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableFunc
     }
 
     override fun getColumns(): Int {
-        return if(backingList.isEmpty()) 0
-        else backingList.size
+        return width
     }
 
     override fun getRows(): Int {
-        return if(backingList.isEmpty()) 0
-        else backingList[0].size
+        return height
     }
 
     override fun getAsString(column: Int, row: Int): String {
-        return backingList[column][row].getValue(column, row).toString()
+        return getFromArray(column, row).toString()
     }
 
     override fun get(column: Int, row: Int): E {
         checkBounds(column, row)
-        return backingList[column][row].getValue(column, row)
+        return getFromArray(column, row)
     }
 
     override fun getFunction(column: Int, row: Int): MonoTableAccessor<E>.(currentColumn: Int, currentRow: Int) -> E {
@@ -65,32 +110,31 @@ class ArrayFunctionalMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableFunc
 
     override fun getColumn(column: Int): List<E> {
         checkColumnBounds(column)
-        return List(getRows()) {
-            this@ArrayFunctionalMonoTable[column, it]
-        }
+        return getColumnFromArray(column)
     }
 
     override fun getRow(row: Int): List<E> {
-        TODO("Not yet implemented")
+        return getRowFromArray(row)
     }
 
     override fun contains(element: E): Boolean {
-        TODO("Not yet implemented")
+        TODO("Whatever contains means...")
     }
 
     override fun isEmpty(): Boolean {
-        TODO("Not yet implemented")
+        return backingArray.isEmpty()
     }
 
     override fun invoke(column: Int, row: Int, func: MonoTableAccessor<E>.(currentCol: Int, currentRow: Int) -> E) {
         checkBounds(column, row)
-        val e = backingList[column][row]
+        val e = getFromArrayAsCell(column, row)
         if (e is ValueCell){
-            backingList[column][row] = FunctionalCell(func, access)
+            setArrayAsCell(column ,row, FunctionalCell(func, access) )
         } else if (e is FunctionalCell){
             e.func = func
         }
     }
+
     override fun setColumnFunc(column: Int, func: MonoTableAccessor<E>.(currentCol: Int, currentRow: Int) -> E) {
         TODO("Not yet implemented")
     }
@@ -101,9 +145,9 @@ class ArrayFunctionalMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableFunc
 
     override fun set(column: Int, row: Int, element: E) {
         checkBounds(column, row)
-        val e = backingList[column][row]
+        val e = getFromArrayAsCell(column, row)
         if (e is FunctionalCell){
-            backingList[column][row] = ValueCell(element)
+            setArrayAsCell(column ,row, ValueCell(element) )
         } else if (e is ValueCell){
             e.element = element
         }
@@ -112,40 +156,64 @@ class ArrayFunctionalMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableFunc
     override fun setColumn(column: Int, new: List<E>) {
         checkColumnBounds(column)
         checkColumnSize(new)
-        for (i in 0 until getRows()){
-            backingList[column][i] = ValueCell(new[i])
+        for (i in new.indices){
+            backingArray[i * width + column] = ValueCell(new[i])
         }
     }
 
 
     override fun addColumn(column: Int, new: List<E>) {
         checkColumnSize(new)
-        val columnList : MutableList<TableCell<E>> = ArrayList()
-        columnList.addAll( new.map { ValueCell(it) } )
-        backingList.add(column, columnList)
+        val old: Array<*> = backingArray.copyOf()
+        val newArray: Array<*>
+        var counter = 0
+        newArray = Array( (width+1)*height ) {
+            val j = (it+(width+1-column)) % (width+1)
+            val k = if(j==0) {
+                counter++
+            } else {
+                it - counter
+            }
+            if(j==0) ValueCell<E>(new[k]) else old[k]
+        }
+
+        width++
+        backingArray = newArray.unsafestCast()
     }
 
     override fun setRow(row: Int, new: List<E>) {
         checkRowBounds(row)
         checkRowSize(new)
-        for (i in 0 until getColumns()){
-            backingList[i][row] = ValueCell(new[i])
+        for (i in new.indices){
+            backingArray[row * width + i] = ValueCell(new[i])
         }
     }
 
     override fun addRow(row: Int, new: List<E>) {
         checkRowSize(new)
-        if(getColumns() == 0) rowInit( new ) else
-        for (i in 0 until getColumns()){
-            backingList[i].add(row, ValueCell(new[i]))
+        val old: Array<*> = backingArray.copyOf()
+        val newArray: Array<*>
+        var counter = 0
+        newArray = Array( (width)*(height+1) ) {
+            val j = it / (width)
+            val k = if(j==row) {
+                counter++
+                it - j*width
+            } else it - (counter)
+            if(j==row) ValueCell(new[k]) else old[k]
         }
+
+        height++
+        backingArray = newArray.unsafestCast()
     }
 
+    /*
     private fun rowInit( new: List<E>){
         for (e in new){
             backingList.add( MutableList(1) { ValueCell(e) })
         }
     }
+     */
 }
 
 internal sealed class TableCell<E> {

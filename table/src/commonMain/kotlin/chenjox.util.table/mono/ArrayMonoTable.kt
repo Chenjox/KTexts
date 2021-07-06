@@ -1,6 +1,13 @@
 package chenjox.util.table.mono
 
-class ArrayMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableMonoTable<E> {
+/*
+inline fun <reified E> ArrayMonoTable(columns: Int, rows: Int, func: (column: Int, row: Int) -> E){
+}
+*/
+
+public class ArrayMonoTable<E>(columns: Int = 1, rows: Int = 1) : MutableMonoTable<E> {
+
+    //private val backingArray: Array<E> = Array<E>(columns*rows) {}
 
     private val backingList: MutableList<MutableList<E>> = ArrayList()
 

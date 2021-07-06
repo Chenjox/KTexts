@@ -1,6 +1,6 @@
 package chenjox.util.table.mono
 
-fun <E> MonoTable<E>.asMutableTable() : MutableMonoTable<E> {
+public fun <E> MonoTable<E>.asMutableTable() : MutableMonoTable<E> {
     val newTable: MutableMonoTable<E> = ArrayMonoTable()
     for (column in 0 until getColumns()){
         newTable.addColumn( getColumn( column ) )
@@ -8,7 +8,7 @@ fun <E> MonoTable<E>.asMutableTable() : MutableMonoTable<E> {
     return newTable
 }
 
-fun <E,R> MonoTable<E>.map(mapper: (element : E) -> R) : MonoTable<R> {
+public fun <E,R> MonoTable<E>.map(mapper: (element : E) -> R) : MonoTable<R> {
     val newTable: MutableMonoTable<R> = ArrayMonoTable()
     for (column in 0 until getColumns()){
         newTable.addColumn( getColumn( column ).map(mapper) )

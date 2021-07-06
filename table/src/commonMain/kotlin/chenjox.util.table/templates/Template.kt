@@ -1,8 +1,8 @@
 package chenjox.util.table.templates
 
 /** A contract on how _Templates_ should behave. Templates are Special kinds of Tables. therefore they are treated specially. */
-interface TableTemplate{
+public interface TableTemplate{
 
-    fun render() : String
+    public fun render() : String
 
 }

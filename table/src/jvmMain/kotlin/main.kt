@@ -1,19 +1,27 @@
-import chenjox.util.table.dsl.template.ColumnTable
-import chenjox.util.table.dsl.template.ascii
-import chenjox.util.table.dsl.template.mapper
-import chenjox.util.table.dsl.template.padding
-import chenjox.util.table.mono.ArrayFunctionalMonoTable
-import chenjox.util.table.mono.left
-import chenjox.util.table.mono.qol.addRow
-import chenjox.util.table.mono.right
-import chenjox.util.table.templates.ColumnFunctionalTable
-import chenjox.util.table.templates.ColumnTableTemplate
+import chenjox.util.table.mono.*
+import chenjox.util.table.mono.addRow
 import chenjox.util.table.templates.DoubleColumnTable
 import chenjox.util.table.transformer.mono.*
 import chenjox.util.table.transformer.mono.ascii.AsciiMonoTransformer
 import kotlin.math.roundToInt
 
 fun main(){
+
+    val t = ArrayMonoTable(5, 3) {
+        column: Int, row: Int ->
+        (column+1)+(row+1)*5
+    }
+
+    println(AsciiMonoTransformer<Int>{ it.toString() }.invoke(t))
+
+    t.addColumn(column = 5, new = listOf(100, 100, 100))
+    t.addRow(row = 3, new = listOf(200, 200, 200, 200, 200, 200))
+
+    println(AsciiMonoTransformer<Int>{ it.toString() }.invoke(t))
+
+}
+
+fun dsl() {
 
     val t = DoubleColumnTable(
         listOf(
@@ -40,10 +48,4 @@ fun main(){
     //TODO Padding on left and right
 
     println( t.render() )
-
-}
-
-fun dsl() {
-
-
 }

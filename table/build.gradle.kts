@@ -17,10 +17,16 @@ repositories {
 
 kotlin {
     jvm()
-    js()
+    js(IR).browser()
+    js(IR).nodejs()
     /* Targets configuration omitted. 
     *  To find out how to configure the targets, please follow the link:
     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
+    jvm{
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -34,5 +40,12 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
+        val jvmTest by getting{
+            dependencies {
+                implementation(kotlin("test-junit5"))
+            }
+        }
     }
+
+    explicitApi = org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Strict
 }

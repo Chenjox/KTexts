@@ -9,6 +9,8 @@ fun <E> HeaderTransformer(vararg headers: String) : HeaderTransformer<E>{
     return HeaderTransformer(headers.asList())
 }
 
+
+@Deprecated("See TableTransformer")
 class HeaderTransformer<E>(val headers: List<String>, val mapper: (element : E) -> String = { it.toString() }, val fallback: String = "" ) : MonoTableTransformer<E, MonoTable<String>>{
     override fun invoke(table: MonoTable<E>): MonoTable<String> {
         val t = table.map(mapper).asMutableTable()

@@ -4,6 +4,7 @@ import chenjox.util.table.mono.MonoTable
 import chenjox.util.table.mono.asMutableTable
 import chenjox.util.table.mono.map
 
+@Deprecated("See TableTransformer")
 class AlignmentTransformer<E>(val alignment: Alignment, val mapper: (element: E) -> String = { it.toString() }) : MonoTableTransformer<E, MonoTable<String>> {
 
     override fun invoke(table: MonoTable<E>): MonoTable<String> {

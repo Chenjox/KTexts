@@ -1,23 +1,23 @@
 package chenjox.util.table.mono
 
-interface MutableMonoTable<E> : MonoTable<E> {
+public interface MutableMonoTable<E> : MonoTable<E> {
 
     /** sets the element at the designated [column] and [row] to the [element] */
-    operator fun set(column : Int, row : Int, element : E)
+    public operator fun set(column : Int, row : Int, element : E)
 
-    fun setColumn(column: Int, new : List<E>)
+    public fun setColumn(column: Int, new : List<E>)
 
-    fun addColumn(column: Int, new: List<E>)
+    public fun addColumn(column: Int, new: List<E>)
 
-    fun addColumn(new: List<E>){
+    public fun addColumn(new: List<E>){
         addColumn(getColumns(), new)
     }
 
-    fun setRow(row: Int, new: List<E>)
+    public fun setRow(row: Int, new: List<E>)
 
-    fun addRow(row: Int, new: List<E>)
+    public fun addRow(row: Int, new: List<E>)
 
-    fun addRow(new: List<E>){
+    public fun addRow(new: List<E>){
         addRow(getRows(), new)
     }
 

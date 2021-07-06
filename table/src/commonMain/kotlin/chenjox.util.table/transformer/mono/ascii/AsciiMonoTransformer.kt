@@ -5,6 +5,7 @@ import chenjox.util.table.transformer.mono.MonoTableTransformer
 import chenjox.util.table.transformer.mono.calculateColumnWidths
 import kotlin.math.max
 
+@Deprecated("TableTransformer are deprecated! For Output use a renderer instead!")
 class AsciiMonoTransformer<E>(val mapper: (cell: E) -> String = { it.toString() }) : MonoTableTransformer<E, String> {
 
     private fun calculateWidths(table: MonoTable<E>) : IntArray = calculateColumnWidths(table, mapper)

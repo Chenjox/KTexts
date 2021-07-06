@@ -1,14 +1,14 @@
 package chenjox.util.table
 
 /** A universal contract how _every_ table should behave. Especially helpful for rendering */
-interface Table {
+public interface Table {
 
     /** Returns the number of columns */
-    fun getColumns() : Int
+    public fun getColumns() : Int
 
     /** Returns the number of rows */
-    fun getRows() : Int
+    public fun getRows() : Int
 
-    fun getAsString(column : Int, row : Int) : String
+    public fun getAsString(column : Int, row : Int) : String
 
 }
