@@ -27,6 +27,16 @@ kotlin {
             useJUnitPlatform()
         }
     }
+    js().browser {
+        testRuns["test"].executionTask.configure {
+            useMocha()
+        }
+    }
+    js().nodejs {
+        testRuns["test"].executionTask.configure {
+            useMocha()
+        }
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -44,6 +54,13 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-junit5"))
             }
+        }
+        val jsTest by getting{
+            dependencies {
+                implementation(kotlin("test-js"))
+                //implementation(npm( "mocha", "9.0.2" ))
+            }
+
         }
     }
 

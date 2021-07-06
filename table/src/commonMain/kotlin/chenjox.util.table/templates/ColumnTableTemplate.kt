@@ -1,12 +1,8 @@
 package chenjox.util.table.templates
 
-import chenjox.util.table.mono.ArrayFunctionalMonoTable
-import chenjox.util.table.mono.MonoTableAccessor
-import chenjox.util.table.mono.MonoTableRelativeAccessor
-import chenjox.util.table.mono.MutableMonoTable
-import chenjox.util.table.transformer.mono.*
+import chenjox.util.table.mono.*
 
-fun <E> ColumnTable( list: List<(MonoTableRelativeAccessor<E>.() -> E)?>, initializer: E, transformer: MonoTableTransformer<E, String> ) : ColumnTableTemplate<E> {
+public fun <E> ColumnTable( list: List<(MonoTableRelativeAccessor<E>.() -> E)?>, initializer: E, renderer: (MonoTable<E>) -> String ) : ColumnTableTemplate<E> {
     return ColumnTableTemplate(
         ColumnFunctionalTable(
             list.map {
@@ -17,17 +13,17 @@ fun <E> ColumnTable( list: List<(MonoTableRelativeAccessor<E>.() -> E)?>, initia
                     return@map t
                 } else null
             },
-            ArrayFunctionalMonoTable()
+            ArrayFunctionalMonoTable { _, _ -> initializer }
         ) { initializer },
-        transformer
+        renderer
     )
 }
 
-fun DoubleColumnTable(list: List<(MonoTableRelativeAccessor<Double>.() -> Double)?>, transformer: MonoTableTransformer<Double, String>, initializer: Double = 0.0 )
-    = ColumnTable( list, initializer, transformer)
+public fun DoubleColumnTable(list: List<(MonoTableRelativeAccessor<Double>.() -> Double)?>, initializer: Double = 0.0, renderer: (MonoTable<Double>) -> String ): ColumnTableTemplate<Double>
+    = ColumnTable( list, initializer, renderer)
 
-class ColumnTableTemplate<E>(private val delegate: MutableMonoTable<E>,private val outputter: MonoTableTransformer<E, String>): MutableMonoTable<E> by delegate {
+public class ColumnTableTemplate<E>(private val delegate: MutableMonoTable<E>, private val renderer: (MonoTable<E>) -> String): MutableMonoTable<E> by delegate {
 
-    fun render(): String = outputter(delegate)
+    public fun render(): String = renderer(this)
 
 }

@@ -139,7 +139,15 @@ public class ArrayFunctionalMonoTable<E>(columns: Int = 1, rows: Int = 1, func: 
         TODO("Not yet implemented")
     }
 
+    override fun addColumnFunc(column: Int, func: MonoTableAccessor<E>.(currentCol: Int, currentRow: Int) -> E) {
+        TODO("Not yet implemented")
+    }
+
     override fun setRowFunc(row: Int, func: MonoTableAccessor<E>.(currentCol: Int, currentRow: Int) -> E) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addRowFunc(row: Int, func: MonoTableAccessor<E>.(currentCol: Int, currentRow: Int) -> E) {
         TODO("Not yet implemented")
     }
 

@@ -4,7 +4,7 @@ import chenjox.util.table.TableException
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 
-class ArrayColumnMultiTable : MutableColumnMultiTable {
+public class ArrayColumnMultiTable : MutableColumnMultiTable {
 
     private var contentClasses : MutableList<KClass<*>> = ArrayList()
 

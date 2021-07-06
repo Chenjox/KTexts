@@ -13,7 +13,7 @@ interface TI_MonoTable<T> : TI_Table {
     override fun createSupplier(): TI_MonoTable_InstanceSupplier<T>
 
     @Test
-    fun `get() Exceptions`(){
+    fun `get_Exceptions`(){
         val s = createSupplier()
         assertFailsWith(IndexOutOfBoundsException::class, "A Index higher-or-equal than getRows() should throw an Error!") {
             val t = s.getInstance()
@@ -34,7 +34,7 @@ interface TI_MonoTable<T> : TI_Table {
     }
 
     @Test
-    fun `get() Correctness`(){
+    fun `get_Correctness`(){
         val s = createSupplier()
         val t = s.getInstance()
         for (i in 0 until s.getColumns())
@@ -44,42 +44,48 @@ interface TI_MonoTable<T> : TI_Table {
     }
 
     @Test
-    fun `getRow() Correctness`(){
+    fun `getRow_Correctness`(){
         todo {
             TODO()
         }
     }
 
     @Test
-    fun `getRow() Exceptions`(){
+    fun `getRow_Exceptions`(){
+        val s = createSupplier()
+        assertFailsWith(IndexOutOfBoundsException::class, "A Index higher-or-equal than getRows() should throw an Error!") {
+            val t = s.getInstance()
+            val r = t.getRow( s.getRows() )
+        }
+        assertFailsWith(IndexOutOfBoundsException::class, "A Index less than -1 should throw an Error!"){
+            val t = s.getInstance()
+            val r = t.getRow( -1 )
+        }
+    }
+
+    @Test
+    fun `getColumn_Correctness`(){
         todo {
             TODO()
         }
     }
 
     @Test
-    fun `getColumn() Correctness`(){
+    fun `getColumn_Exceptions`(){
         todo {
             TODO()
         }
     }
 
     @Test
-    fun `getColumn() Exceptions`(){
+    fun `contains_Correctness`(){
         todo {
             TODO()
         }
     }
 
     @Test
-    fun `contains() Correctness`(){
-        todo {
-            TODO()
-        }
-    }
-
-    @Test
-    fun `isEmpty() Correctness`(){
+    fun `isEmpty_Correctness`(){
         todo {
             TODO()
         }

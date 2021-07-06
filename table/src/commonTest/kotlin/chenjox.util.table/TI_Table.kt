@@ -11,27 +11,27 @@ interface TI_Table {
     fun createSupplier() : TI_Table_InstanceSupplier
 
     @Test
-    fun `GetColumns() Correctness`(){
+    fun `GetColumns_Correctness`(){
         val s = createSupplier()
         assertEquals( s.getColumns(), s.getInstance().getColumns() )
     }
 
     @Test
-    fun `GetRows() Correctness`(){
+    fun `GetRows_Correctness`(){
         val s = createSupplier()
         assertEquals( s.getRows(), s.getInstance().getRows())
     }
 
 
     @Test
-    fun `GetAsString() Correctness`(){
+    fun `GetAsString_Correctness`(){
         todo {
             TODO("Where is the correct result?")
         }
     }
 
     @Test
-    fun `GetAsString() Exceptions`(){
+    fun `GetAsString_Exceptions`(){
         val s = createSupplier()
         assertFailsWith(IndexOutOfBoundsException::class, "A Index higher-or-equal than getRows() should throw an Error!") {
             val t = s.getInstance()

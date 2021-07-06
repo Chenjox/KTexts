@@ -3,11 +3,11 @@ package chenjox.util.table.dsl
 import chenjox.util.table.Table
 
 @TableDsl
-interface TableBuilder<T : Table> {
+public interface TableBuilder<T : Table> {
 
-    fun build() : T
+    public fun build() : T
 
 }
 
 @DslMarker
-annotation class TableDsl
+public annotation class TableDsl

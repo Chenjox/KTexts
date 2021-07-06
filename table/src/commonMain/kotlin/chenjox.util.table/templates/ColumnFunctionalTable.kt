@@ -6,7 +6,7 @@ import chenjox.util.table.mono.*
  * A Template Table that restricts access to the setting of certain fields.
  * its getters refer to the table as a whole, while the setters only refer to the specified fields
  */
-class ColumnFunctionalTable<E>(
+public class ColumnFunctionalTable<E>(
     list: List<(MonoTableAccessor<E>.(currentCol : Int, currentRow : Int) -> E)?>,
     delegate: MutableFunctionalMonoTable<E>,
     private val initializer: () -> E
@@ -74,6 +74,8 @@ class ColumnFunctionalTable<E>(
     }
 
     // These are Illegal!
+
+    // FIXME Be a bit more Special!
 
     override fun addColumn(column: Int, new: List<E>) {
         NOTSUPPORTED("Columns must be known at creation time.")
