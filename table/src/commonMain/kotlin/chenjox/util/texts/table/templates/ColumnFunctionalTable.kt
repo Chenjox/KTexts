@@ -10,7 +10,7 @@ public class ColumnFunctionalTable<E>(
     list: List<(MonoTableAccessor<E>.(currentCol : Int, currentRow : Int) -> E)?>,
     delegate: MutableFunctionalMonoTable<E>,
     private val initializer: () -> E
-) : MutableMonoTable<E> by delegate
+) : MutableRowMonoTable<E> by delegate
 {
 
     private val backingTable: MutableFunctionalMonoTable<E>
@@ -38,7 +38,7 @@ public class ColumnFunctionalTable<E>(
         backingTable[readWriteIndeces[column], row] = element
     }
 
-    override fun setColumn(column: Int, new: List<E>) {
+    public fun setColumn(column: Int, new: List<E>) {
         for (i in 0 until backingTable.getRows()){
             backingTable[readWriteIndeces[column], i] = new[i]
         }
@@ -73,20 +73,4 @@ public class ColumnFunctionalTable<E>(
         this.addRow(backingTable.getRows(), new)
     }
 
-    // These are Illegal!
-
-    // FIXME Be a bit more Special!
-
-    override fun addColumn(column: Int, new: List<E>) {
-        NOTSUPPORTED("Columns must be known at creation time.")
-    }
-
-    override fun addColumn(new: List<E>) {
-        NOTSUPPORTED("Columns must be known at creation time.")
-    }
-
-}
-
-private fun NOTSUPPORTED(reason: String): Nothing{
-    throw NotImplementedError(reason)
 }
