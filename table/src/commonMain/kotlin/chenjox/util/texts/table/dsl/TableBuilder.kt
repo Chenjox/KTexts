@@ -1,4 +1,4 @@
-package chenjox.util.table.dsl
+package chenjox.util.texts.table.dsl
 
 import chenjox.util.table.Table
 

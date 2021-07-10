@@ -1,20 +1,17 @@
-package chenjox.util.table.dsl.template
+package chenjox.util.texts.table.dsl.template
 
-import chenjox.util.table.dsl.TableBuilder
-import chenjox.util.table.dsl.TableDsl
-import chenjox.util.table.mono.MonoTable
+import chenjox.util.texts.table.dsl.TableBuilder
+import chenjox.util.texts.table.dsl.TableDsl
 import chenjox.util.table.mono.MonoTableAccessor
 import chenjox.util.table.mono.MonoTableRelativeAccessor
 import chenjox.util.table.templates.ColumnTableTemplate
-import kotlin.math.pow
-import kotlin.math.roundToInt
 
 public fun <E> ColumnTable(init: ColumnTableBuilder<E>.() -> Unit){
     TODO()
 }
 
 @TableDsl
-public interface ColumnTableBuilder<E> : TableBuilder<ColumnTableTemplate<E>>{
+public interface ColumnTableBuilder<E> : TableBuilder<ColumnTableTemplate<E>> {
 
     public fun column(header: String? = null, index: Int? = null) : ColumnSpec<E>
     public fun column(index: Int? = null) : ColumnSpec<E>

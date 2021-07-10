@@ -1,7 +1,7 @@
-package chenjox.util.table.dsl.mono
+package chenjox.util.texts.table.dsl.mono
 
-import chenjox.util.table.dsl.TableBuilder
-import chenjox.util.table.dsl.TableDsl
+import chenjox.util.texts.table.dsl.TableBuilder
+import chenjox.util.texts.table.dsl.TableDsl
 import chenjox.util.table.mono.*
 
 public fun <E> Mono(initialValue: E, init: MonoTableBuilder<E>.() -> Unit) : MonoTable<E>{

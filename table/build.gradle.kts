@@ -5,7 +5,7 @@ plugins {
 
 val grouping = "chenjox.util.texts"
 val artifac = "table"
-val vers = "0.1.1-PreAlpha"
+val vers = "0.1.2-PreAlpha"
 
 group = grouping
 version = vers
